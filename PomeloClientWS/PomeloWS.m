@@ -98,6 +98,13 @@ private)
 
 }
 
+- (void)dealloc {
+    NSLog(@"%s", __func__);
+    [_webSocket close];
+    _webSocket.delegate = nil;
+    _webSocket = nil;
+}
+
 #pragma mark - init
 - (id)initWithDelegate:(id <PomeloWSDelegate>)delegate {
   self = [super init];
@@ -240,6 +247,10 @@ private)
  didFailWithError:(NSError *)error {
 
   NSLog(@"did ws error =====> WS: %@, ERR: %@", webSocket, error);
+    if ([_delegate respondsToSelector:@selector(Pomelo:didFailWithError:)]) {
+        [_delegate Pomelo:self didFailWithError:error];
+    }
+
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket

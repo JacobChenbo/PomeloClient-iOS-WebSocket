@@ -24,6 +24,8 @@ typedef void(^PomeloWSCallback)(id arg);
 @optional
 - (void)PomeloDidConnect:(PomeloWS *)pomelo;
 
+- (void)Pomelo:(PomeloWS *)pomelo didFailWithError:(NSError *)error;
+
 - (void)PomeloDidDisconnect:(PomeloWS *)pomelo withError:(NSError *)error;
 
 - (void)Pomelo:(PomeloWS *)pomelo didReceiveMessage:(NSArray *)message;
@@ -32,7 +34,7 @@ typedef void(^PomeloWSCallback)(id arg);
 
 @interface PomeloWS : NSObject <SRWebSocketDelegate> {
   // pointer to the delegate
-  __unsafe_unretained id <PomeloWSDelegate> _delegate;
+//  __unsafe_unretained id <PomeloWSDelegate> _delegate;
 
   // the main connector
   SRWebSocket *_webSocket;
@@ -63,6 +65,9 @@ typedef void(^PomeloWSCallback)(id arg);
   // store dict/protos ect.
   NSMutableDictionary *_data;
 }
+
+@property (nonatomic, weak) id<PomeloWSDelegate> delegate;
+
 #pragma mark - init
 - (id)initWithDelegate:(id <PomeloWSDelegate>)delegate;
 

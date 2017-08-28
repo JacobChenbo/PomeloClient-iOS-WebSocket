@@ -410,7 +410,11 @@ static __strong NSData *CRLFCRLF;
 - (void)open;
 {
     assert(_url);
-    NSAssert(_readyState == SR_CONNECTING, @"Cannot call -(void)open on SRWebSocket more than once");
+//    NSAssert(_readyState == SR_CONNECTING, @"Cannot call -(void)open on SRWebSocket more than once");
+    if (_readyState != SR_CONNECTING) {
+        // Cannot call -(void)open on SRWebSocket more than once
+        return;
+    }
 
     _selfRetain = self;
     
@@ -715,7 +719,12 @@ static __strong NSData *CRLFCRLF;
 }
 - (void)send:(id)data;
 {
-    NSAssert(self.readyState != SR_CONNECTING, @"Invalid State: Cannot call send: until connection is open");
+//    NSAssert(self.readyState != SR_CONNECTING, @"Invalid State: Cannot call send: until connection is open");
+    if (self.readyState == SR_CONNECTING) {
+        // Invalid State: Cannot call send: until connection is open
+        return;
+    }
+    
     // TODO: maybe not copy this for performance
     data = [data copy];
     dispatch_async(_workQueue, ^{
